@@ -183,6 +183,7 @@ onScroll();
   const apptCard = document.getElementById('apptCard');
   const successPanel = document.getElementById('successPanel');
   const submitBtn = document.getElementById('submitBtn');
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLdWgLBS6Dllo1X5KNgGdEvoN9yhduAa0GPJh45OVjaWY_Z1VEpL-LxZ8Z2svMnLSPNA/exec";
 
   // EmailJS placeholders — replace with your real EmailJS account values.
   // 1. Sign up at https://www.emailjs.com
@@ -274,17 +275,25 @@ onScroll();
       alert('Something went wrong sending your request. Please call us directly at +91 76781 04886.');
     }
 
-    // If the EmailJS SDK is loaded and configured, send the email.
-    if (window.emailjs && EMAILJS_SERVICE_ID !== 'YOUR_EMAILJS_SERVICE_ID') {
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data, EMAILJS_PUBLIC_KEY)
-        .then(onSuccess)
-        .catch(onError);
-    } else {
-      // Fallback demo behaviour so the form is fully testable before
-      // EmailJS credentials are added.
-      console.warn('EmailJS is not configured yet — showing demo success state. Add your EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID and EMAILJS_PUBLIC_KEY in script.js and load the EmailJS SDK to send real emails.');
-      setTimeout(onSuccess, 700);
-    }
+    const formData = new FormData();
+
+formData.append("fullName", data.fullName);
+formData.append("phone", data.phone);
+formData.append("email", data.email);
+formData.append("treatment", data.treatment);
+formData.append("prefDate", data.prefDate);
+formData.append("prefTime", data.prefTime);
+formData.append("message", data.message);
+
+fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    body: formData
+})
+.then(res => res.text())
+.then(() => {
+    onSuccess();
+})
+.catch(onError);
   });
 
   ['fullName','phone','email','treatment','prefDate','prefTime'].forEach(id => {
