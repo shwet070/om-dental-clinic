@@ -944,3 +944,18 @@ section{ position:relative; }
     display:flex;
     align-items:center;
 }
+.exit-popup-icon {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.exit-logo {
+    width: 130px;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
